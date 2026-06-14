@@ -29,6 +29,7 @@
     background: rgba(0, 0, 0, 0.4);
     border-radius: 20px;
     backdrop-filter: blur(6px);
+    transition: transform 0.15s ease-out;
 
     /* Glow */
     box-shadow: 0 0 20px rgba(255,255,255,0.4),
@@ -109,7 +110,7 @@
 <body>
 
 <!-- Profile Card -->
-<div class="profile">
+<div class="profile" id="profileCard">
   <img src="https://github.com/shadowzoncrck/profile/blob/main/pfp%20ok.png?raw=true" alt="pfp">
 
   <div class="profile-text">
@@ -158,6 +159,20 @@
 
     document.body.appendChild(star);
   }
+
+  /* STRONG 3D Rotation Effect */
+  const card = document.getElementById("profileCard");
+
+  document.addEventListener("mousemove", (e) => {
+    const xPercent = e.clientX / window.innerWidth - 0.5;
+    const yPercent = e.clientY / window.innerHeight - 0.5;
+
+    const rotateY = xPercent * 55;  // stronger left/right tilt
+    const rotateX = -yPercent * 55; // stronger up/down tilt
+
+    card.style.transform =
+      `translate(-50%, -50%) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
 </script>
 
 </body>
