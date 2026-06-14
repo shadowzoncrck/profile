@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>kindasocial</title>
+
+<!-- Rubik Font -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+    font-family: 'Rubik', sans-serif;
+    color: white;
+  }
+
+  /* Profile container */
+  .profile {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding: 25px 35px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+
+    /* Glow */
+    box-shadow: 0 0 20px rgba(255,255,255,0.4),
+                0 0 40px rgba(255,255,255,0.2);
+  }
+
+  .profile img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+  }
+
+  .profile-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Shake Name */
+  .name {
+    font-size: 32px;
+    letter-spacing: 8px;
+    font-weight: bold;
+    animation: shake 1.2s infinite ease-in-out;
+    display: inline-block;
+  }
+
+  @keyframes shake {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(1px, -1px); }
+    40% { transform: translate(-1px, 1px); }
+    60% { transform: translate(1px, 1px); }
+    80% { transform: translate(-1px, -1px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .about {
+    margin-top: 8px;
+    font-size: 16px;
+    opacity: 0.8;
+  }
+
+  /* Social links */
+  .socials {
+    position: absolute;
+    top: calc(50% + 120px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    font-size: 20px;
+  }
+
+  .socials a {
+    color: white;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: 0.2s;
+  }
+
+  .socials a:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  /* Stars */
+  .star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+  }
+</style>
+</head>
+<body>
+
+<!-- Profile Card -->
+<div class="profile">
+  <img src="https://github.com/shadowzoncrck/profile/blob/main/pfp%20ok.png?raw=true" alt="pfp">
+
+  <div class="profile-text">
+    <div class="name">k i n d a s o c i a l</div>
+    <div class="about">i like coding and doing stupid things.</div>
+  </div>
+</div>
+
+<!-- Social Links -->
+<div class="socials">
+  <a href="https://tiktok.com/@k1ndasocial">Tiktok</a>
+  <a href="https://github.com/shadowzoncrck">GitHub</a>
+  <a href="https://www.youtube.com/@6xxj">YouTube</a>
+</div>
+
+<script>
+  const starCount = 150;
+
+  for (let i = 0; i < starCount; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 100 + "vh";
+
+    const size = Math.random() * 3 + 1;
+    star.style.width = size + "px";
+    star.style.height = size + "px";
+
+    const speed = Math.random() * 20 + 10;
+    const xMove = (Math.random() - 0.5) * 200;
+    const yMove = (Math.random() - 0.5) * 200;
+
+    star.animate(
+      [
+        { transform: "translate(0, 0)" },
+        { transform: `translate(${xMove}vw, ${yMove}vh)` }
+      ],
+      {
+        duration: speed * 1000,
+        iterations: Infinity,
+        direction: "alternate",
+        easing: "linear"
+      }
+    );
+
+    document.body.appendChild(star);
+  }
+</script>
+
+</body>
+</html>
