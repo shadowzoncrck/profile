@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>kindasocial</title>
 
-<!-- Rubik Font -->
+
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -14,9 +14,64 @@
     background: #000;
     font-family: 'Rubik', sans-serif;
     color: white;
+    cursor: none; 
   }
 
-  /* Profile container */
+ 
+  #cursorDot {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+  }
+
+
+  #cursorTrail {
+    position: fixed;
+    width: 22px;
+    height: 22px;
+    border: 2px solid white;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+  }
+
+ 
+  .ripple {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid white;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9997;
+    transform: translate(-50%, -50%);
+    animation: rippleAnim 0.5s ease-out forwards;
+  }
+
+  @keyframes rippleAnim {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(4); }
+  }
+
+ 
+  @keyframes cardIntro {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -40%) scale(0.85);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+
   .profile {
     position: absolute;
     top: 50%;
@@ -30,8 +85,8 @@
     border-radius: 20px;
     backdrop-filter: blur(6px);
     transition: transform 0.15s ease-out;
+    animation: cardIntro 0.9s ease-out forwards;
 
-    /* Glow */
     box-shadow: 0 0 20px rgba(255,255,255,0.4),
                 0 0 40px rgba(255,255,255,0.2);
   }
@@ -49,7 +104,7 @@
     flex-direction: column;
   }
 
-  /* Shake Name */
+
   .name {
     font-size: 32px;
     letter-spacing: 8px;
@@ -73,7 +128,19 @@
     opacity: 0.8;
   }
 
-  /* Social links */
+
+  @keyframes socialsIntro {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, 20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+
   .socials {
     position: absolute;
     top: calc(50% + 120px);
@@ -82,21 +149,26 @@
     display: flex;
     gap: 20px;
     font-size: 20px;
+    opacity: 0;
+    animation: socialsIntro 1.1s ease-out forwards;
+    animation-delay: 0.2s;
   }
 
   .socials a {
     color: white;
     text-decoration: none;
     opacity: 0.8;
-    transition: 0.2s;
+    transition: 0.25s ease;
+    transform: translateY(0);
   }
 
   .socials a:hover {
     opacity: 1;
-    transform: scale(1.1);
+    transform: translateY(-6px) scale(1.15);
+    text-shadow: 0 0 10px white, 0 0 20px white;
   }
 
-  /* Stars */
+
   .star {
     position: absolute;
     width: 3px;
@@ -105,11 +177,36 @@
     border-radius: 50%;
     opacity: 0.8;
   }
+
+
+  #muteBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid white;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    backdrop-filter: blur(4px);
+    transition: 0.25s ease;
+  }
+
+  #muteBtn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 12px white;
+  }
 </style>
 </head>
 <body>
 
-<!-- Profile Card -->
+
+<div id="cursorDot"></div>
+<div id="cursorTrail"></div>
+
+
 <div class="profile" id="profileCard">
   <img src="https://github.com/shadowzoncrck/profile/blob/main/pfp%20ok.png?raw=true" alt="pfp">
 
@@ -119,12 +216,20 @@
   </div>
 </div>
 
-<!-- Social Links -->
+
 <div class="socials">
   <a href="https://tiktok.com/@k1ndasocial">Tiktok</a>
   <a href="https://github.com/shadowzoncrck">GitHub</a>
   <a href="https://www.youtube.com/@6xxj">YouTube</a>
 </div>
+
+
+<button id="muteBtn">🔊</button>
+
+
+<audio id="bgMusic" loop autoplay>
+  <source src="https://github.com/shadowzoncrck/profile/raw/refs/heads/main/thrax%20-%20SSGKobe%20(128k).mp3" type="audio/mpeg">
+</audio>
 
 <script>
   const starCount = 150;
@@ -160,18 +265,68 @@
     document.body.appendChild(star);
   }
 
-  /* STRONG 3D Rotation Effect */
+
   const card = document.getElementById("profileCard");
 
   document.addEventListener("mousemove", (e) => {
     const xPercent = e.clientX / window.innerWidth - 0.5;
     const yPercent = e.clientY / window.innerHeight - 0.5;
 
-    const rotateY = xPercent * 55;  // stronger left/right tilt
-    const rotateX = -yPercent * 55; // stronger up/down tilt
+    const rotateY = xPercent * 55;
+    const rotateX = -yPercent * 55;
 
     card.style.transform =
       `translate(-50%, -50%) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+
+
+  const music = document.getElementById("bgMusic");
+  const muteBtn = document.getElementById("muteBtn");
+
+  muteBtn.addEventListener("click", () => {
+    if (music.muted) {
+      music.muted = false;
+      muteBtn.textContent = "🔊";
+    } else {
+      music.muted = true;
+      muteBtn.textContent = "🔇";
+    }
+  });
+
+
+  const cursorDot = document.getElementById("cursorDot");
+  const cursorTrail = document.getElementById("cursorTrail");
+
+  document.addEventListener("mousemove", (e) => {
+    cursorDot.style.left = e.clientX + "px";
+    cursorDot.style.top = e.clientY + "px";
+
+    cursorTrail.style.left = e.clientX + "px";
+    cursorTrail.style.top = e.clientY + "px";
+  });
+
+
+  document.addEventListener("mouseenter", () => {
+    document.body.style.cursor = "none";
+    cursorDot.style.display = "block";
+    cursorTrail.style.display = "block";
+  });
+
+  document.addEventListener("mouseleave", () => {
+    document.body.style.cursor = "default";
+    cursorDot.style.display = "none";
+    cursorTrail.style.display = "none";
+  });
+
+
+  document.addEventListener("click", (e) => {
+    const ripple = document.createElement("div");
+    ripple.classList.add("ripple");
+    ripple.style.left = e.clientX + "px";
+    ripple.style.top = e.clientY + "px";
+    document.body.appendChild(ripple);
+
+    setTimeout(() => ripple.remove(), 500);
   });
 </script>
 
